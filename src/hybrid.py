@@ -90,6 +90,22 @@ class HybridRecommender:
         return sorted(scored, key=lambda row: (-row[1], row[0]))[:limit]
 
     def recommend(self, user_id: int, seen_item_ids: Iterable[str] | None = None, limit: int = 10) -> list[tuple[str, float]]:
+        """Return a blend, skipping a zero-weight source without changing rank order."""
+        validate_positive_int(limit, "limit")
+        if self.cf_weight == 1.0:
+            try:
+                normalized_user_id = int(user_id)
+            except (TypeError, ValueError) as exc:
+                raise ValueError("user_id must be an integer") from exc
+            seen = None if seen_item_ids is None else {str(item_id) for item_id in seen_item_ids}
+            return self.collaborative.recommend(normalized_user_id, seen, limit)
+        if self.cf_weight == 0.0:
+            try:
+                normalized_user_id = int(user_id)
+            except (TypeError, ValueError) as exc:
+                raise ValueError("user_id must be an integer") from exc
+            seen = None if seen_item_ids is None else {str(item_id) for item_id in seen_item_ids}
+            return self.content.recommend(normalized_user_id, seen, limit)
         cf_scores, content_scores = self.source_scores(user_id, seen_item_ids)
         return self.combine_scores(cf_scores, content_scores, limit)
 
