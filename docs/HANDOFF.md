@@ -2,46 +2,52 @@
 
 ## Current phase
 
-Phase 0 — Amazon Retail Demo Store project foundation complete.
+Phase 1 — Amazon Retail Demo Store dataset inspection and EDA complete.
 
 ## Completed
 
-- The project owner froze the dataset as Amazon Retail Demo Store synthetic e-commerce data in `data/raw/amazon_retail_demo/`.
-- Downloaded the exact three user-specified raw files; the initial shape/header inspection is recorded in `DATA_CONTRACT.md`.
-- Replaced abandoned H&M-oriented project documentation with Amazon-specific Phase 0 source-of-truth documents.
-- Added `requirements.txt`; reshaped empty source folders to `backend/`, `src/`, and `frontend/` for the intended architecture.
-- No EDA beyond initial shape/header reading, preprocessing, model, database, API, or UI has been implemented.
+- Added `src/inspect_dataset.py`, a saved read-only EDA script.
+- Ran it against the frozen raw CSVs and wrote `data/processed/phase1_inspection_report.json` (Git-ignored).
+- Verified schemas, missingness, duplicates, event/discount distributions, catalog/user quality, timestamp range, and cross-file consistency.
+- Updated README, data contract, technical decisions, and TODO with only executed findings.
 
 ## Files changed
 
-`README.md`, `.env.example`, `requirements.txt`, all required documents under `docs/`, plus empty source directories.
+`src/inspect_dataset.py`, `README.md`, `docs/DATA_CONTRACT.md`, `docs/TECH_DECISIONS.md`, `docs/TODO.md`, and `docs/HANDOFF.md`. The generated JSON report is intentionally Git-ignored.
 
 ## Important decisions
 
-- Dataset cannot be replaced or supplemented.
-- Catalog metadata is authoritative; frontend must use actual catalog values.
-- Event types, discount semantics, interaction aggregation, subset need, content fields, and all model parameters remain unselected pending Phase 1.
-- Product cards are image-free unless a later phase verifies a local authoritative mapping.
+- Use all 675,004 interactions; no subset is justified.
+- Retain all verified event types for Phase 2; interaction weights require a documented policy and are not assumed.
+- Use item names/descriptions and complete category/gender metadata as later TF-IDF candidates.
+- Treat discount as categorical `Yes`/`No`.
+- Treat missing `PROMOTED` as unknown until Phase 2 specifies a defensible normalization rule.
 
 ## Dataset facts discovered
 
-The raw directory has `interactions.csv` (675,004 × 5), `items.csv` (2,465 × 8), and `users.csv` (6,000 × 3). These are preliminary shape/header facts only, not full EDA conclusions.
+- 6,000 users, 2,465 items, and complete referential consistency.
+- Events: View 581,900; AddToCart 46,552; ViewCart 29,095; StartCheckout 11,638; Purchase 5,819.
+- Interaction data has no missing values or duplicate event rows; catalog and user files have no duplicate IDs.
+- Product descriptions are complete, but promotion has 1,856 missing values.
 
 ## Tests and checks
 
-- Verified required Phase 0 docs and raw directory exist.
-- No executable application code exists, so no software tests apply.
+- `python src/inspect_dataset.py --raw-dir data/raw/amazon_retail_demo --report data/processed/phase1_inspection_report.json` completed successfully.
+- `python -m py_compile src/inspect_dataset.py` completed successfully.
+- No Pytest tests exist yet; Phase 2 must add them.
 
 ## Known issues
 
-- None blocking Phase 1. Pytest is declared but not yet installed in the current Python environment.
+- `DISCOUNT` was described earlier as numeric but is actually categorical text; docs corrected.
+- `PROMOTED` has a high missing rate; do not infer a business meaning without a documented rule.
+- Pytest is declared in requirements but not installed in the current environment.
 
 ## Next phase
 
-Phase 1: inspect the frozen CSVs read-only and document evidence-based EDA and feasibility.
+Phase 2: saved preprocessing pipeline, transformed data contract, and Pytest tests.
 
 ## Do not change
 
-- Do not use H&M, Retailrocket, MovieLens, or any other dataset.
-- Do not edit raw CSVs or invent product/user metadata, images, metrics, or event semantics.
-- Do not implement preprocessing, models, MySQL, Flask, or React before explicit Phase 1 approval.
+- Do not change or edit raw CSVs, replace the dataset, or introduce other data sources.
+- Do not invent event weights or interpret missing `PROMOTED` as false without documenting the rule.
+- Do not train models, create MySQL tables, API routes, or frontend features until each corresponding phase is explicitly approved.

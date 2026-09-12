@@ -3,21 +3,27 @@
 ## Phase 0 — complete
 
 - [x] Establish Amazon Retail Demo Store as the final frozen dataset.
-- [x] Keep raw CSVs in Git-ignored local storage.
 - [x] Create source-of-truth documentation, project layout, `.env.example`, and `requirements.txt` skeleton.
-- [x] Define initial architecture and non-data-dependent technical decisions.
 
-## Phase 1 — next: dataset inspection and EDA
+## Phase 1 — complete: dataset inspection and EDA
 
-- [ ] Inspect actual interaction events, quality, timestamp range, and discount distribution.
-- [ ] Inspect catalog metadata completeness and distributions.
-- [ ] Inspect user data quality and distributions.
-- [ ] Check item/user referential consistency across files.
-- [ ] Decide from evidence whether all interactions can be used or a reproducible subset is needed.
+- [x] Create and run saved read-only inspection script, `src/inspect_dataset.py`.
+- [x] Inspect interaction events, timestamps, discount distribution, data quality, and user activity.
+- [x] Inspect catalog metadata completeness, categories, prices, promotion field, and description quality.
+- [x] Inspect user data completeness, ages, and gender values.
+- [x] Verify zero item/user orphan records across the three CSVs.
+- [x] Decide that full data is feasible and no subset is needed.
+
+## Phase 2 — next: preprocessing
+
+- [ ] Implement reproducible raw-to-processed validation and transformations.
+- [ ] Define timestamp, `DISCOUNT`, and missing `PROMOTED` normalization rules.
+- [ ] Investigate repeated user-item event behavior and document interaction aggregation/strength policy.
+- [ ] Create processed users, products, and interactions datasets.
+- [ ] Add and run preprocessing tests with Pytest.
 
 ## Later phases — not started
 
-- [ ] Phase 2: preprocessing and final data contract.
 - [ ] Phase 3: MySQL schema and load.
 - [ ] Phase 4–9: baselines, models, evaluation, cold start.
 - [ ] Phase 10–12: Flask, React, testing/robustness.

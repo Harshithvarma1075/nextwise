@@ -13,3 +13,13 @@
 | Database | MySQL for application records only | Artifacts and sparse matrices remain on disk. |
 
 No event weights, subset rule, model parameters, or metrics have been chosen.
+
+## Phase 1 evidence updates
+
+| Topic | Decision | Evidence |
+| --- | --- | --- |
+| Working subset | Use all 675,004 raw interactions | 42.5 MB input, 6,000 users, 2,465 items, and no referential gaps make sampling unnecessary. |
+| Interaction event semantics | Preserve all five verified event types until Phase 2 aggregation | `View`, `AddToCart`, `ViewCart`, `StartCheckout`, and `Purchase` exist; weights are not dataset facts. |
+| Content fields | Use catalog text/category fields as the primary later content candidates | Names/descriptions are complete; category levels and gender are complete. |
+| Discount | Treat as categorical `Yes`/`No` | Inspection disproved the prior numeric-field assumption. |
+| Promotion | Treat missing values as unknown pending documented normalization | 1,856 of 2,465 values are missing; inferring false would be an unsupported assumption. |
