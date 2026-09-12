@@ -46,8 +46,15 @@
 - [x] Handle empty metadata, unknown items/users, zero vectors, and seen filtering.
 - [x] Evaluate content filtering under the same temporal protocol.
 
+## Phase 7 — complete: validation-selected hybrid
+
+- [x] Build a per-user score-normalized CF/content candidate blend.
+- [x] Add explicit validation and artifact-compatibility error handling.
+- [x] Select blend weight on validation only and evaluate once on untouched test data.
+- [x] Save the final hybrid artifact and documented, executed experiment results.
+
 ## Later phases — not started
 
-- [ ] Phase 7–9: hybrid model, full evaluation, and cold start.
+- [ ] Phase 8–9: full evaluation/robustness and cold start.
 - [ ] Phase 10–12: Flask, React, testing/robustness.
 - [ ] Phase 13–14: final documentation and QA.

@@ -75,3 +75,14 @@ No event weights, subset rule, model parameters, or metrics have been chosen.
 | User content profile | L2-normalized sum of historical product vectors | Represents the catalog content a user has actually interacted with, without inventing event weights. |
 | Excluded fields | Price and promotion | Neither has been empirically assessed as a helpful structured recommendation signal; promotion is also often unknown. |
 | Evaluation outcome | Retain content model as an explainable candidate source, not as a CF replacement | Its test NDCG@10 (0.026511) exceeded popularity but was much lower than CF (0.354436) under the identical protocol. |
+
+## Phase 7 decisions
+
+| Topic | Decision | Rationale |
+| --- | --- | --- |
+| Candidate fusion | Union the top 100 unseen candidates from CF and content | Bounds serving work while allowing either model to contribute an item. |
+| Score normalization | Per-user max normalization, independently for CF and content | Their raw scores have different scales; normalization permits a meaningful weighted blend. |
+| Weight search | Test CF weights 0.00–1.00 in 0.05 increments on validation only | Covers the complete blend range without leaking the test window into model selection. |
+| Selection metric | Highest validation NDCG@10, then recall@10, precision@10, and greater CF weight | Optimizes ranked relevance with deterministic, documented ties. |
+| Selected blend | CF 1.00, content 0.00 | This was the best validation result. A content-inclusive blend did not outperform pure CF. |
+| Invalid/incomplete state | Fail on malformed interaction/catalog inputs or mismatched component catalogs; unknown users return no hybrid candidates | Prevents silently mixing incompatible artifacts; later cold-start handling remains explicit. |
