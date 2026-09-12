@@ -2,22 +2,23 @@
 
 ## Phase 0 — complete
 
-- [x] Retire Retailrocket-specific raw data, derived artifacts, EDA, and preprocessing code.
-- [x] Establish H&M as the sole dataset in source-of-truth documentation.
-- [x] Retain a minimal technology-aligned project skeleton and Git ignore rules.
-- [x] Define initial architecture, decisions, TODO, handoff, and README.
+- [x] Establish Amazon Retail Demo Store as the final frozen dataset.
+- [x] Keep raw CSVs in Git-ignored local storage.
+- [x] Create source-of-truth documentation, project layout, `.env.example`, and `requirements.txt` skeleton.
+- [x] Define initial architecture and non-data-dependent technical decisions.
 
-## Phase 1 — next: H&M acquisition and EDA
+## Phase 1 — next: dataset inspection and EDA
 
-- [ ] Acquire the H&M dataset into Git-ignored local storage.
-- [ ] Inspect actual files, schemas, sizes, data quality, metadata/image coverage, and interaction density.
-- [ ] Assess feasible working subset from observed data and hardware constraints.
-- [ ] Document a reproducible subset strategy if required.
+- [ ] Inspect actual interaction events, quality, timestamp range, and discount distribution.
+- [ ] Inspect catalog metadata completeness and distributions.
+- [ ] Inspect user data quality and distributions.
+- [ ] Check item/user referential consistency across files.
+- [ ] Decide from evidence whether all interactions can be used or a reproducible subset is needed.
 
 ## Later phases — not started
 
-- [ ] Phase 2: reproducible preprocessing and final data contract.
-- [ ] Phase 3: MySQL schema and processed-data loading.
-- [ ] Phase 4–9: recommenders, evaluation, and cold start.
-- [ ] Phase 10–12: Flask API, React UI, testing/robustness.
-- [ ] Phase 13–14: final documentation and end-to-end QA.
+- [ ] Phase 2: preprocessing and final data contract.
+- [ ] Phase 3: MySQL schema and load.
+- [ ] Phase 4–9: baselines, models, evaluation, cold start.
+- [ ] Phase 10–12: Flask, React, testing/robustness.
+- [ ] Phase 13–14: final documentation and QA.

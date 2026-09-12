@@ -2,14 +2,12 @@
 
 ## Status: planned, not implemented
 
-The intended minimal API is:
-
 | Method | Endpoint | Purpose |
 | --- | --- | --- |
-| GET | `/api/health` | Health status. |
-| GET | `/api/products` | Paginated/listed verified product records. |
-| GET | `/api/products/<article_id>` | One verified product record. |
-| GET | `/api/recommendations/<customer_id>?limit=10` | Validated personalized Top-N results. |
-| POST | `/api/recommendations/cold-start` | Optional cold-start preferences when mapped to verified metadata. |
+| GET | `/api/health` | Application health. |
+| GET | `/api/products` | Catalog products from verified fields. |
+| GET | `/api/products/<item_id>` | One catalog product. |
+| GET | `/api/recommendations/<user_id>?limit=10` | Validated personalized Top-N recommendations. |
+| POST | `/api/recommendations/cold-start` | Optional popularity-based cold-start response. |
 
-Response fields remain undecided until Phase 1 verifies the H&M metadata schema. Errors will use safe, consistent JSON without internal exceptions or secrets.
+Final JSON fields, pagination, errors, and cold-start body are pending data and implementation phases. The API will use structured safe errors and never expose credentials or tracebacks.

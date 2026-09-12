@@ -1,29 +1,29 @@
 # Architecture
 
-## Target design
+## Target flow
 
 ```text
-H&M source files
-  → inspection and subset decision
-  → validated preprocessing
-  ├→ processed customers
-  ├→ processed articles and metadata features
-  └→ processed purchase interactions
-       ├→ sparse user-item matrix → item-based collaborative candidates
-       └→ TF-IDF product vectors → content candidates
-             → normalized hybrid scorer → seen-item filtering → Top-N
-             → persisted model artifacts and evaluation reports
+Raw Amazon Retail Demo Store CSVs
+  → inspection → reproducible preprocessing
+  ├→ processed users
+  ├→ processed catalog / TF-IDF product features
+  └→ processed event interactions / sparse user-item matrix
+       ├→ popularity baseline
+       ├→ item-based collaborative candidates
+       └→ content candidates
+             → normalized hybrid ranking → seen-item filter → Top-N
+             → persisted artifacts + evaluation reports
 
-React/Vite → Flask REST API → recommendation service → MySQL + model artifacts
+React/Vite → Flask REST API → recommendation service → MySQL + local artifacts
 ```
 
-## Responsibilities
+## Layer responsibilities
 
 | Layer | Responsibility |
 | --- | --- |
-| `ml/` | Reproducible offline inspection, preprocessing, features, models, evaluation, artifact creation. |
-| `app/` | Flask routes, input validation, safe REST responses, online recommendation orchestration. |
-| MySQL | Processed users, products, interactions, optional recommendation logs. |
-| `frontend/` | Product browsing, customer selection, recommendations, explanations, and error/loading/empty states. |
+| `src/` | Offline validation, preprocessing, feature construction, models, evaluation, artifact creation. |
+| `backend/app/` | Flask routes, safe input validation, recommendation orchestration, MySQL access. |
+| MySQL | Processed users, catalog products, interactions, and optional logs. |
+| `frontend/` | Customer selection, product browsing, recommendation display, explanations, and safe UI states. |
 
-No H&M-specific schema decision has been made yet.
+Product images are not part of the design unless Phase 1 discovers a reliable local mapping.

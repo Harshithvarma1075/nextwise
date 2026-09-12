@@ -1,17 +1,21 @@
 # Data contract
 
-## Status: pending H&M dataset inspection
+## Status: Phase 1 inspection pending
 
-Retailrocket findings are retired. Phase 1 must inspect the locally downloaded H&M dataset before any implementation depends on it.
+## Frozen raw inputs
 
-## Expected inputs — unverified
+| File | Initial verified shape | Columns |
+| --- | ---: | --- |
+| `interactions.csv` | 675,004 × 5 | `ITEM_ID`, `USER_ID`, `EVENT_TYPE`, `TIMESTAMP`, `DISCOUNT` |
+| `items.csv` | 2,465 × 8 | `ITEM_ID`, `PRICE`, `CATEGORY_L1`, `CATEGORY_L2`, `PRODUCT_NAME`, `PRODUCT_DESCRIPTION`, `GENDER`, `PROMOTED` |
+| `users.csv` | 6,000 × 3 | `USER_ID`, `AGE`, `GENDER` |
 
-Potential files include `articles.csv`, `customers.csv`, and `transactions_train.csv`, plus optional images. Their presence, encoding, columns, sizes, row counts, nulls, identifiers, and relationships are unknown until inspected.
+The initial read observed UUID-like item IDs, numeric user IDs, Unix-like integer timestamps, and human-readable catalog metadata. It did not establish event types, missingness, duplicates, distributions, orphan counts, or final types/semantics.
 
-## Phase 1 deliverables
+## Phase 1 requirements
 
-Document actual source files, file sizes, schemas, quality findings, timestamp range, customer/product coverage, interaction density, metadata coverage, image mapping feasibility, and an evidence-based reproducible working-subset strategy if needed.
+Inspect actual event types, counts, timestamp range, missingness, duplicate/invalid rows, discount values, catalog completeness, category/price/gender/promotion distributions, description quality, user age/gender coverage, and cross-file orphan records. Do not modify raw CSVs.
 
-## Future processed contracts
+## Future processed contract
 
-Phase 2 will define validated processed customer, product, and interaction datasets, including excluded records, aggregation rules, metadata feature treatment, and output schemas.
+Phase 2 will document validated and normalized schemas, exclusions, timestamp conversion, interaction aggregation, and any reproducible subset rule. No processed schema has yet been chosen.
