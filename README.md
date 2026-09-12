@@ -4,7 +4,7 @@ An end-to-end, explainable product recommendation system for the NxtWise hiring 
 
 ## Status
 
-**Phase 8 complete — evaluation and robustness audit.** The validation-selected CF-only hybrid has been audited on the untouched test window with bootstrap uncertainty, history slices, coverage/diversity, and fresh-process artifact loading. Flask and React are not yet implemented.
+**Phase 9 complete — cold-start routing.** The system now uses personalized CF for known users with usable history and a safe popularity fallback for anonymous, unknown, or exhausted-personalization cases. Flask and React are not yet implemented.
 
 ## Frozen dataset
 
@@ -45,7 +45,7 @@ models/     Git-ignored generated model artifacts
 
 ## Next phase
 
-The next development phase is Phase 9: add an explicit popularity-backed cold-start strategy and evaluate it without altering the existing personalized-model comparison.
+The next development phase is Phase 10: implement the Flask recommendation API around the saved cold-start router and MySQL product data.
 
 ## Disclosure
 
