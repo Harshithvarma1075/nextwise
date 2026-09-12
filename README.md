@@ -4,7 +4,7 @@ An end-to-end, explainable product recommendation system for the NxtWise hiring 
 
 ## Status
 
-**Phase 6 complete — content-based filtering.** Saved CF and TF-IDF content models produce personalized unseen-item candidates and have been evaluated under one leakage-safe temporal protocol. Hybrid ranking, Flask, and React are not yet implemented.
+**Phase 7 complete — validation-selected hybrid ranking.** CF and TF-IDF content candidates are score-normalized and blended only when validation supports it. The current validation-optimal blend is CF-only; Flask and React are not yet implemented.
 
 ## Frozen dataset
 
@@ -45,7 +45,7 @@ models/     Git-ignored generated model artifacts
 
 ## Next phase
 
-The next development phase is Phase 7: combine the evaluated CF and content candidates in a validation-selected hybrid ranker.
+The next development phase is Phase 8: expand the offline evaluation and robustness analysis without changing the frozen test protocol.
 
 ## Disclosure
 
