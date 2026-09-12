@@ -1,6 +1,6 @@
 # Evaluation
 
-## Status: Phase 4 popularity baseline evaluated
+## Status: Phase 6 content filtering evaluated
 
 ## Protocol
 
@@ -36,6 +36,17 @@ Item-based CF represents an interaction as binary (the user interacted with the 
 
 These are executed results from `src.collaborative`, saved in the Git-ignored `data/processed/collaborative_evaluation.json`. Under the same test protocol, CF materially outperformed global popularity (NDCG@10 0.354436 vs. 0.018441). This supports—not proves universally—that this dataset's repeated user-item patterns carry useful personalized signal.
 
+## Content-based filtering
+
+The content model turns each catalog product into a TF-IDF document containing its verified product name, description, category levels, and catalog gender. Category and gender values are field-prefixed tokens; the user profile is the normalized sum of their historical product vectors. Price and promotion are deliberately excluded because they have not been evaluated as useful structured signals.
+
+| Model | Split | Eligible users | Users with candidates | Precision@10 | Recall@10 | NDCG@10 |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| TF-IDF content filtering | Validation | 2,804 | 2,804 | 0.004066 | 0.033999 | 0.022580 |
+| TF-IDF content filtering | Test | 2,275 | 2,275 | 0.003912 | 0.036557 | 0.026511 |
+
+These are executed results from `src.content_based`, saved in the Git-ignored `data/processed/content_evaluation.json`. Content filtering improves test NDCG@10 over global popularity (0.026511 vs. 0.018441), but is substantially weaker than CF (0.354436). The later hybrid phase must choose weights on validation only; it must not presume that adding content improves CF.
+
 ## Remaining evaluation work
 
-Evaluate content filtering and validation-selected hybrid weights under this same protocol. Do not choose hybrid weights using test results.
+Evaluate validation-selected hybrid weights and cold-start fallback under this same protocol. Do not choose hybrid weights using test results.

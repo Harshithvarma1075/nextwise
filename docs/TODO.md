@@ -39,12 +39,12 @@
 - [x] Handle unknown users, empty candidates, seen filtering, and Top-N limits.
 - [x] Test and evaluate CF against the recorded popularity baseline.
 
-## Phase 6 — next: content-based filtering
+## Phase 6 — complete: content-based filtering
 
-- [ ] Build a TF-IDF product representation from verified catalog metadata.
-- [ ] Implement content-based candidate generation from a user's history.
-- [ ] Handle empty metadata, unknown items/users, zero vectors, and seen filtering.
-- [ ] Evaluate content filtering under the same temporal protocol.
+- [x] Build a TF-IDF product representation from verified catalog metadata.
+- [x] Implement content-based candidate generation from a user's history.
+- [x] Handle empty metadata, unknown items/users, zero vectors, and seen filtering.
+- [x] Evaluate content filtering under the same temporal protocol.
 
 ## Later phases — not started
 

@@ -64,3 +64,14 @@ No event weights, subset rule, model parameters, or metrics have been chosen.
 | Neighbor storage | Keep top 100 positive-scoring neighbors per item | Provides bounded, efficient online candidate generation without storing all pairwise scores. |
 | Similarity computation | Sparse normalized item matrix multiplication | Replaced slow brute-force nearest-neighbor fitting; maintains cosine semantics while completing feasibly on the full dataset. |
 | Unknown/empty user | Return no CF candidates | Lets the planned popularity cold-start layer handle users without history rather than fabricating personalized output. |
+
+## Phase 6 decisions
+
+| Topic | Decision | Rationale |
+| --- | --- | --- |
+| Content inputs | Product name, description, category level 1, category level 2, and catalog gender | These fields are complete, human-readable, and verified in the frozen item catalog. |
+| Field encoding | Prefix category and catalog-gender tokens in each product document | Keeps structured values distinguishable from ordinary words while retaining interpretable content. |
+| Content representation | TF-IDF with English stop words, unigrams/bigrams, sublinear term frequency, and at most 25,000 features | A compact, reproducible text representation that supports cosine similarity without external embeddings. |
+| User content profile | L2-normalized sum of historical product vectors | Represents the catalog content a user has actually interacted with, without inventing event weights. |
+| Excluded fields | Price and promotion | Neither has been empirically assessed as a helpful structured recommendation signal; promotion is also often unknown. |
+| Evaluation outcome | Retain content model as an explainable candidate source, not as a CF replacement | Its test NDCG@10 (0.026511) exceeded popularity but was much lower than CF (0.354436) under the identical protocol. |
