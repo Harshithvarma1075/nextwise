@@ -23,3 +23,13 @@ No event weights, subset rule, model parameters, or metrics have been chosen.
 | Content fields | Use catalog text/category fields as the primary later content candidates | Names/descriptions are complete; category levels and gender are complete. |
 | Discount | Treat as categorical `Yes`/`No` | Inspection disproved the prior numeric-field assumption. |
 | Promotion | Treat missing values as unknown pending documented normalization | 1,856 of 2,465 values are missing; inferring false would be an unsupported assumption. |
+
+## Phase 2 decisions
+
+| Topic | Decision | Rationale |
+| --- | --- | --- |
+| Processed event log | Retain every validated event, with UTC timestamp and boolean discount flag | Maintains auditability and defers model strength choices. |
+| User-item aggregate | One row per user-item with event-specific counts and temporal bounds | Preserves repeated behavior without treating all events as equal preference. |
+| `PROMOTED` normalization | `true` or `unknown`; no inferred false state | Source lacks explicit false values for 1,856 products. |
+| Cross-file violations | Fail preprocessing rather than silently remove interaction rows | Prevents hidden referential-data loss. |
+| Artifact publication | Atomic CSV writes | Protects against partially written processed files after Windows output-lock failure. |

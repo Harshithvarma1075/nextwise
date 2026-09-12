@@ -1,44 +1,47 @@
 # Data contract
 
-## Status: Phase 1 raw inspection complete; processed contract pending Phase 2
+## Status: Phase 2 processed contract complete
 
 ## Frozen raw inputs
 
-| File | Size | Shape | Columns |
-| --- | ---: | ---: | --- |
-| `interactions.csv` | 42,458,562 bytes | 675,004 × 5 | `ITEM_ID`, `USER_ID`, `EVENT_TYPE`, `TIMESTAMP`, `DISCOUNT` |
-| `items.csv` | 1,018,383 bytes | 2,465 × 8 | `ITEM_ID`, `PRICE`, `CATEGORY_L1`, `CATEGORY_L2`, `PRODUCT_NAME`, `PRODUCT_DESCRIPTION`, `GENDER`, `PROMOTED` |
-| `users.csv` | 58,912 bytes | 6,000 × 3 | `USER_ID`, `AGE`, `GENDER` |
+| File | Shape | Schema |
+| --- | ---: | --- |
+| `interactions.csv` | 675,004 × 5 | `ITEM_ID`, `USER_ID`, `EVENT_TYPE`, `TIMESTAMP`, `DISCOUNT` |
+| `items.csv` | 2,465 × 8 | `ITEM_ID`, `PRICE`, `CATEGORY_L1`, `CATEGORY_L2`, `PRODUCT_NAME`, `PRODUCT_DESCRIPTION`, `GENDER`, `PROMOTED` |
+| `users.csv` | 6,000 × 3 | `USER_ID`, `AGE`, `GENDER` |
 
-## Verified interaction facts
+Raw files are never edited. Run the reproducible pipeline:
 
-- Columns contain no missing values, exact duplicate rows, invalid/missing IDs, or duplicate `(USER_ID, ITEM_ID, EVENT_TYPE, TIMESTAMP)` combinations.
-- Event counts: `View` 581,900; `AddToCart` 46,552; `ViewCart` 29,095; `StartCheckout` 11,638; `Purchase` 5,819.
-- All 6,000 users and all 2,465 items appear in interactions.
-- Timestamps are integer Unix seconds: 2025-11-13T18:40:59Z to 2026-01-26T20:42:43Z.
-- `DISCOUNT` is a complete categorical `Yes`/`No` field, not a numeric field: `No` 411,850 and `Yes` 263,154.
-- User interaction counts range from 24 to 219 (median 115).
+```text
+C:\Users\Harshith Varma\AppData\Local\Python\pythoncore-3.14-64\python.exe src\preprocessing.py --raw-dir data\raw\amazon_retail_demo --output-dir data\processed
+```
 
-## Verified catalog facts
+## Validated transformations
 
-- No missing or duplicate item IDs, exact duplicate rows, blank descriptions, duplicate name/description pairs, or non-positive prices.
-- 20 `CATEGORY_L1` values and 84 `CATEGORY_L2` values exist. Product gender values are `Any` (1,716), `F` (431), and `M` (318).
-- `PROMOTED` is object-typed with `True` for 609 records and missing values for 1,856; missing must not be assumed false without a documented Phase 2 rule.
-- Price median is 79.99, 95th percentile is 1,299.99, and maximum is 24,999.99; the distribution is right-skewed.
-- Descriptions are complete and non-empty (median length 310 characters), supporting later TF-IDF content representation.
+- Required columns and non-empty files are required.
+- IDs are trimmed and validated as nonblank (`item_id`) or positive integer (`user_id`).
+- `age`, `price`, and Unix timestamps are validated as positive numeric values.
+- Event types must be the Phase 1 observed set: `View`, `AddToCart`, `ViewCart`, `StartCheckout`, `Purchase`.
+- `DISCOUNT` must be `Yes`/`No` and becomes boolean `discount_applied`.
+- Unix timestamps are retained and converted to UTC `event_timestamp`.
+- Exact duplicate source rows are removed. Non-identical repeated events are retained.
+- Any interaction referencing a user/item absent from the validated catalogs stops the pipeline rather than silently dropping data.
+- Item gender is normalized to `F`, `M`, or `ANY`.
+- `PROMOTED=True` becomes `true`; a missing source value becomes `unknown`. Unexpected non-null values make the affected item invalid rather than being silently relabeled.
+- No interaction-strength or recommendation weight is assigned in preprocessing.
 
-## Verified user facts
+## Generated processed outputs
 
-- No missing values, exact duplicate rows, duplicate user IDs, or invalid ages.
-- Gender values: `F` 3,068 and `M` 2,932.
-- Age range 18–84; median 35 and mean approximately 36.13.
+| Output | Rows | Schema / purpose |
+| --- | ---: | --- |
+| `users_processed.csv` | 6,000 | `user_id`, `age`, `gender` |
+| `items_processed.csv` | 2,465 | `item_id`, `price`, `category_l1`, `category_l2`, `product_name`, `product_description`, `gender`, `promoted_status` |
+| `interactions_processed.csv` | 675,004 | `user_id`, `item_id`, `event_type`, `timestamp_unix`, `event_timestamp`, `discount_applied` |
+| `user_item_interactions.csv` | 66,262 | One row per user-item pair with first/last timestamp, total/discounted counts, and one count column per observed event type. |
+| `preprocessing_report.json` | n/a | Executed input/output counts, drops, and transformation decisions. |
 
-## Cross-file integrity and feasibility
+No raw row was removed in the executed dataset: all 6,000 users, 2,465 items, and 675,004 events passed validation; 609 item records are `promoted_status=true` and 1,856 are `unknown`.
 
-There are zero interaction items missing from the catalog, zero interaction users missing from the user file, zero catalog items without interactions, and zero catalog users without interactions.
+## Output reliability
 
-The user-item matrix is 6,000 × 2,465 with 675,004 observed events (observed-event density ≈ 0.04564). The full file is practical for this assessment; no Phase 1 subset is justified. Later CF work must still use sparse matrices because a dense similarity representation would be unnecessary.
-
-## Phase 2 contract work
-
-Phase 2 must preserve raw files and script validation/type normalization, timestamp conversion, duplicate policy, interaction aggregation, categorical treatment for `DISCOUNT`, and an explicit missing-value policy for `PROMOTED`. The final processed schemas and any interaction-strength weights are not selected yet.
+Processed CSVs are written through temporary files and atomically published, preventing a partially written artifact if output writing fails. All generated outputs remain Git-ignored.

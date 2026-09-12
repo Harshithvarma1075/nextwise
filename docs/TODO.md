@@ -3,28 +3,29 @@
 ## Phase 0 — complete
 
 - [x] Establish Amazon Retail Demo Store as the final frozen dataset.
-- [x] Create source-of-truth documentation, project layout, `.env.example`, and `requirements.txt` skeleton.
+- [x] Create project foundation, source-of-truth docs, configuration example, and dependency skeleton.
 
-## Phase 1 — complete: dataset inspection and EDA
+## Phase 1 — complete
 
-- [x] Create and run saved read-only inspection script, `src/inspect_dataset.py`.
-- [x] Inspect interaction events, timestamps, discount distribution, data quality, and user activity.
-- [x] Inspect catalog metadata completeness, categories, prices, promotion field, and description quality.
-- [x] Inspect user data completeness, ages, and gender values.
-- [x] Verify zero item/user orphan records across the three CSVs.
-- [x] Decide that full data is feasible and no subset is needed.
+- [x] Inspect all raw files, distributions, quality, and referential integrity.
+- [x] Decide that the full 675,004-event dataset requires no subset.
 
-## Phase 2 — next: preprocessing
+## Phase 2 — complete: preprocessing
 
-- [ ] Implement reproducible raw-to-processed validation and transformations.
-- [ ] Define timestamp, `DISCOUNT`, and missing `PROMOTED` normalization rules.
-- [ ] Investigate repeated user-item event behavior and document interaction aggregation/strength policy.
-- [ ] Create processed users, products, and interactions datasets.
-- [ ] Add and run preprocessing tests with Pytest.
+- [x] Add `src/preprocessing.py` for reproducible raw-to-processed validation and transformation.
+- [x] Produce validated users, items, cleaned events, user-item aggregates, and a report.
+- [x] Normalize timestamps, discount, gender, and promotion state without inventing source values.
+- [x] Preserve repeated interactions as count features; do not assign model weights yet.
+- [x] Add Pytest preprocessing coverage and run all tests successfully.
+
+## Phase 3 — next: MySQL
+
+- [ ] Design MySQL schema for processed users, products, and interactions.
+- [ ] Add indexes, foreign keys, parameterized loader, and representative query checks.
+- [ ] Load only the processed data required by the future application.
 
 ## Later phases — not started
 
-- [ ] Phase 3: MySQL schema and load.
-- [ ] Phase 4–9: baselines, models, evaluation, cold start.
+- [ ] Phase 4–9: baselines, models, evaluation, and cold start.
 - [ ] Phase 10–12: Flask, React, testing/robustness.
 - [ ] Phase 13–14: final documentation and QA.
