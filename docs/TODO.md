@@ -60,8 +60,14 @@
 - [x] Verify artifact loading in a fresh process and repair stable artifact serialization.
 - [x] Document evidence, limitations, and the interview-ready interpretation of results.
 
+## Phase 9 — complete: cold start
+
+- [x] Implement a route-labeled recommendation service with CF personalization and popularity fallback.
+- [x] Validate user IDs, limits, and seen-item inputs while preserving seen-item filtering on every route.
+- [x] Save and fresh-process-load the cold-start router artifact.
+- [x] Audit known-user routing and simulated anonymous/unknown-user fallback without fabricating relevance labels.
+
 ## Later phases — not started
 
-- [ ] Phase 9: cold start.
 - [ ] Phase 10–12: Flask, React, testing/robustness.
 - [ ] Phase 13–14: final documentation and QA.

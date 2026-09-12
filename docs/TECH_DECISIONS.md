@@ -98,3 +98,13 @@ No event weights, subset rule, model parameters, or metrics have been chosen.
 | Coverage/diversity | Report catalog coverage and category-level-2 intra-list diversity descriptively | Adds product exposure and list-variety context without pretending they measure relevance. |
 | Artifact reliability | Regenerate Joblib artifacts through `src.*` module imports and load them in a fresh process | Prevents failures caused by serializing classes as `__main__`; configuration and reported metrics remain unchanged. |
 | CF-only fast path | Skip content scoring when CF weight is 1.00 (and vice versa for 0.00) | Exact same output with lower serving work; the selected blend is CF-only. |
+
+## Phase 9 decisions
+
+| Topic | Decision | Rationale |
+| --- | --- | --- |
+| Cold-start policy | Use popularity for anonymous/unknown users and when personalized CF returns no candidates | Provides usable Top-N output when behavior-based personalization is impossible. |
+| Personalized route | Use the validation-selected CF-only hybrid for known users with candidates | Preserves the strongest validated personalized model. |
+| Seen-item filtering | Apply the same seen-item exclusion to both personalized and popularity routes | Prevents the fallback from violating the product requirement. |
+| Response provenance | Return `personalized_cf` or `popularity_cold_start` with each result | Makes serving behavior auditable and lets the UI explain fallback output honestly. |
+| Cold-start evaluation | Test routing, output count, determinism, and seen filtering; do not report relevance metrics | The dataset has no future labels for genuine new users, so relevance scoring would be fabricated. |
