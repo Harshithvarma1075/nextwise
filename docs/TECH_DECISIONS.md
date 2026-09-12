@@ -44,3 +44,13 @@ No event weights, subset rule, model parameters, or metrics have been chosen.
 | Load strategy | Parameterized batched upserts in FK order inside one transaction | Safe reruns, bounded memory, and complete rollback on failure. |
 | Production integrity | DB checks + foreign keys plus preprocessing validation | Database constraints are a final safety net, not a substitute for pipeline validation. |
 | CSV boolean conversion | Convert processed `True`/`False` text to MySQL `1`/`0` in the loader | Prevents MySQL strict-mode type error while preserving the processed-data contract. |
+
+## Phase 4 decisions
+
+| Topic | Decision | Rationale |
+| --- | --- | --- |
+| Popularity signal | Unique users who interacted with an item in the training window | A transparent global baseline that prevents repeated views from a small set of users dominating rank. |
+| Rank tie-breaker | Lexicographic `item_id` | Deterministic output when item counts match. |
+| Split | Global temporal 70% train / 15% validation / 15% test | Earlier events train the model; later windows remain unseen for evaluation. |
+| Test refit | Fit final baseline on train + validation before held-out test | Uses all data available before the test window without test leakage. |
+| Seen-item evaluation | Remove historical items from both recommendations and each user’s holdout relevance set | Avoids penalizing a model for intentionally enforcing seen-item filtering. |

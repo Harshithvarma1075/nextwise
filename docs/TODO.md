@@ -25,15 +25,22 @@
 - [x] Add database-independent loader tests and `.env` handling.
 - [x] Create schema, load processed data, and verify actual database counts and foreign-key integrity.
 
-## Phase 4 — next: popularity baseline
+## Phase 4 — complete: popularity baseline
 
-- [ ] Define a simple, defensible interaction-based popularity signal from the processed data.
-- [ ] Implement saved popularity artifacts and Top-N retrieval.
-- [ ] Establish temporal evaluation eligibility/split required for baseline measurement.
-- [ ] Test ranking, limit handling, and cold-start fallback behavior.
+- [x] Define unique-user interaction count as the global popularity signal.
+- [x] Implement saved popularity artifact and Top-N retrieval with seen-item filtering.
+- [x] Establish and execute global temporal train/validation/test evaluation.
+- [x] Test ranking, limit handling, seen-item filtering, metrics, and split behavior.
+
+## Phase 5 — next: collaborative filtering
+
+- [ ] Build a sparse user-item interaction representation using the established temporal protocol.
+- [ ] Implement item-based similarity and personalized unseen-item candidate generation.
+- [ ] Handle unknown users, insufficient histories, empty candidates, and Top-N limits.
+- [ ] Test and evaluate CF against the recorded popularity baseline.
 
 ## Later phases — not started
 
-- [ ] Phase 5–9: collaborative/content/hybrid models, evaluation, and cold start.
+- [ ] Phase 6–9: content/hybrid models, full evaluation, and cold start.
 - [ ] Phase 10–12: Flask, React, testing/robustness.
 - [ ] Phase 13–14: final documentation and QA.

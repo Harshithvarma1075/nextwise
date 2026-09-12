@@ -1,7 +1,30 @@
 # Evaluation
 
-## Status: no evaluation exists
+## Status: Phase 4 popularity baseline evaluated
 
-After Phase 2 establishes clean interactions, evaluation will use a reproducible temporal train/validation/test split for eligible users. The required executed comparison is popularity, collaborative filtering, content filtering, and hybrid filtering using Precision@10, Recall@10, and NDCG@10.
+## Protocol
 
-Hybrid weights will be selected from validation experiments only, then evaluated once on held-out test data. No results, split dates, or weight values have been selected.
+The global temporal split uses processed event timestamps:
+
+| Window | Rows | Boundary |
+| --- | ---: | --- |
+| Train | 472,504 | `timestamp_unix <= 1767539907` |
+| Validation | 101,250 | `1767539907 < timestamp_unix <= 1768500029` |
+| Test | 101,250 | `timestamp_unix > 1768500029` |
+
+Users are eligible only when they have history in the corresponding training window and at least one **unseen** item in the holdout window. Existing historical items are filtered from recommendation candidates and relevance to reflect the product requirement that seen products are not recommended.
+
+## Popularity baseline
+
+The baseline ranks catalog items by the number of unique training users who interacted with them. It uses no event-strength weights. This deliberately simple baseline is used for cold-start fallback and as a comparator for later models.
+
+| Model | Split | Eligible users | Precision@10 | Recall@10 | NDCG@10 |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Popularity | Validation | 2,804 | 0.004280 | 0.038932 | 0.017636 |
+| Popularity | Test | 2,275 | 0.004352 | 0.041758 | 0.018441 |
+
+These are executed results from `src/popularity.py`, saved in the Git-ignored `data/processed/popularity_evaluation.json`. Low absolute scores are expected for a global, non-personalized baseline and establish a real benchmark for collaborative, content, and hybrid experiments.
+
+## Remaining evaluation work
+
+Evaluate collaborative filtering, content filtering, and validation-selected hybrid weights under this same protocol. Do not choose hybrid weights using test results.
