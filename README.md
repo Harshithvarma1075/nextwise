@@ -4,7 +4,7 @@ An end-to-end, explainable product recommendation system for the NxtWise hiring 
 
 ## Status
 
-**Phase 7 complete — validation-selected hybrid ranking.** CF and TF-IDF content candidates are score-normalized and blended only when validation supports it. The current validation-optimal blend is CF-only; Flask and React are not yet implemented.
+**Phase 8 complete — evaluation and robustness audit.** The validation-selected CF-only hybrid has been audited on the untouched test window with bootstrap uncertainty, history slices, coverage/diversity, and fresh-process artifact loading. Flask and React are not yet implemented.
 
 ## Frozen dataset
 
@@ -45,7 +45,7 @@ models/     Git-ignored generated model artifacts
 
 ## Next phase
 
-The next development phase is Phase 8: expand the offline evaluation and robustness analysis without changing the frozen test protocol.
+The next development phase is Phase 9: add an explicit popularity-backed cold-start strategy and evaluate it without altering the existing personalized-model comparison.
 
 ## Disclosure
 
