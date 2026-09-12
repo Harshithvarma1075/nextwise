@@ -33,3 +33,14 @@ No event weights, subset rule, model parameters, or metrics have been chosen.
 | `PROMOTED` normalization | `true` or `unknown`; no inferred false state | Source lacks explicit false values for 1,856 products. |
 | Cross-file violations | Fail preprocessing rather than silently remove interaction rows | Prevents hidden referential-data loss. |
 | Artifact publication | Atomic CSV writes | Protects against partially written processed files after Windows output-lock failure. |
+
+## Phase 3 decisions
+
+| Topic | Decision | Rationale |
+| --- | --- | --- |
+| Persisted tables | `users`, `products`, `interactions` | Directly supports API product/user lookup and recommendation history without storing ML artifacts. |
+| Database engine | MySQL InnoDB with `utf8mb4` | Supports transactions, foreign keys, and catalog text safely. |
+| Event identity | Unique `(user_id, item_id, event_type, timestamp_unix)` | Matches Phase 2's validated raw-event identity and prevents duplicate loads. |
+| Load strategy | Parameterized batched upserts in FK order inside one transaction | Safe reruns, bounded memory, and complete rollback on failure. |
+| Production integrity | DB checks + foreign keys plus preprocessing validation | Database constraints are a final safety net, not a substitute for pipeline validation. |
+| CSV boolean conversion | Convert processed `True`/`False` text to MySQL `1`/`0` in the loader | Prevents MySQL strict-mode type error while preserving the processed-data contract. |

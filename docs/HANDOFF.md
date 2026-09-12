@@ -2,57 +2,50 @@
 
 ## Current phase
 
-Phase 2 — preprocessing complete.
+Phase 3 — MySQL schema and live data loading complete.
 
 ## Completed
 
-- Added `src/preprocessing.py`, a saved raw-to-processed pipeline.
-- Generated Git-ignored processed users, items, event-level interactions, user-item aggregates, and `preprocessing_report.json`.
-- Added `backend/tests/test_preprocessing.py` with seven behavior-oriented tests.
-- Installed Pytest 8.4.2 in the local Python 3.14 environment and ran the suite successfully.
-- Updated documentation with the final Phase 2 data contract and decisions.
+- Added `backend/app/db/schema.sql` for `users`, `products`, and `interactions`.
+- Added `backend/app/db/loader.py`, which reads `.env`, creates tables, performs parameterized batched upserts in one transaction, and verifies loaded counts/referential integrity.
+- Added `backend/tests/test_database_loader.py` and `docs/MYSQL_SETUP.md`.
+- Retained all completed Phase 2 pipeline/data artifacts and tests.
+- Connected to the configured local MySQL database, created the schema, loaded processed data, and executed row-count/foreign-key verification.
 
 ## Files changed
 
-`src/preprocessing.py`, `backend/tests/test_preprocessing.py`, `README.md`, `docs/DATA_CONTRACT.md`, `docs/TECH_DECISIONS.md`, `docs/TODO.md`, and `docs/HANDOFF.md`. Generated processed data is Git-ignored.
+`backend/app/db/schema.sql`, `backend/app/db/loader.py`, `backend/tests/test_database_loader.py`, `docs/MYSQL_SETUP.md`, `README.md`, `docs/TECH_DECISIONS.md`, `docs/TODO.md`, and `docs/HANDOFF.md`. Generated processed data and `.env` are Git-ignored.
 
 ## Dataset facts and outputs
 
-- All 6,000 raw users, 2,465 catalog items, and 675,004 raw events passed executed validation; no raw rows were dropped.
-- Aggregation creates 66,262 unique user-item pairs, keeping per-event counts, first/last timestamps, and discounted-event count.
-- `DISCOUNT` is now `discount_applied` boolean; missing `PROMOTED` remains `unknown` rather than false.
+- Live verification returned exactly 6,000 users, 2,465 products, and 675,004 interactions with no orphan foreign-key records.
+- The schema prevents invalid ages/prices/event types, duplicate natural events, and orphan interaction rows.
 
 ## Important decisions
 
-- Preprocessing is model-neutral: it does not assign event weights.
-- Cross-file orphans cause a safe failure rather than silent removal.
-- Atomic writes prevent partially published output artifacts.
+- MySQL stores application data only; no sparse matrices, TF-IDF vectors, or similarity artifacts enter the database.
+- Re-running the loader is safe because it uses natural-key upserts.
 
 ## Tests and checks
 
-- `python -m pytest backend/tests/test_preprocessing.py -q`: **7 passed**.
-- Pipeline run completed with output counts: 6,000 users, 2,465 items, 675,004 events, 66,262 user-item pairs.
-- `git diff --check` is run before phase completion.
+- `python -m pytest backend/tests/test_preprocessing.py backend/tests/test_database_loader.py -q`: **13 passed**.
+- Live `verify_database(...)` returned `{'users': 6000, 'products': 2465, 'interactions': 675004}`. `git diff --check` passes.
 
 ## Resolved issues
 
-1. Gender normalization initially uppercased `Any` to `ANY` but validation expected mixed-case, dropping 1,716 valid items. The validator now uses normalized `ANY`; rerun retained all items.
-2. Windows temporarily locked an existing processed CSV during a rerun. The pipeline now writes temporary files and atomically publishes outputs, avoiding partial artifacts.
-3. Two initial tests were overly brittle (Pandas datetime unit and accidental duplicate removal). They were corrected to test behavior, not implementation incidental details.
-4. The shell stopped resolving `python`; commands now use the verified Python 3.14 executable path. This is environment-specific, not a project runtime requirement.
+1. Initial MySQL authentication failed; user corrected the local account and the successful live run followed.
+2. MySQL strict mode rejected CSV boolean strings (`False`) for `discount_applied`; the loader now converts them to `0`/`1`, with a regression test.
+3. The loader reads `.env` itself and rejects missing/placeholder credentials, avoiding accidental loads against an unintended database.
 
 ## Known issues
 
-- Processed CSVs are Git-ignored by design; rerun preprocessing after cloning.
-- MySQL has not yet been configured or loaded.
+- No Phase 3 blockers remain. The database is populated with the Phase 2 processed snapshot. Re-run preprocessing and loader after any deliberate data-pipeline change.
 
 ## Next phase
 
-Phase 3: design and implement MySQL schema and a loader for processed application data only.
+Phase 4: implement and evaluate a popularity baseline using the established processed data.
 
 ## Do not change
 
-- Do not alter raw data or use another dataset.
-- Do not infer `PROMOTED=false` from missing source values.
-- Do not add event weights until the popularity/model phase documents and evaluates them.
-- Do not store ML matrices or similarities in MySQL.
+- Do not alter raw data, use another dataset, or store ML matrices/similarities in MySQL.
+- Do not change the database schemas or processed-data contract without updating their tests and documentation.

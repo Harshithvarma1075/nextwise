@@ -18,14 +18,22 @@
 - [x] Preserve repeated interactions as count features; do not assign model weights yet.
 - [x] Add Pytest preprocessing coverage and run all tests successfully.
 
-## Phase 3 — next: MySQL
+## Phase 3 — complete: MySQL
 
-- [ ] Design MySQL schema for processed users, products, and interactions.
-- [ ] Add indexes, foreign keys, parameterized loader, and representative query checks.
-- [ ] Load only the processed data required by the future application.
+- [x] Design schema for validated users, products, and interactions.
+- [x] Add foreign keys, check constraints, natural event uniqueness, query indexes, and parameterized transactional loader.
+- [x] Add database-independent loader tests and `.env` handling.
+- [x] Create schema, load processed data, and verify actual database counts and foreign-key integrity.
+
+## Phase 4 — next: popularity baseline
+
+- [ ] Define a simple, defensible interaction-based popularity signal from the processed data.
+- [ ] Implement saved popularity artifacts and Top-N retrieval.
+- [ ] Establish temporal evaluation eligibility/split required for baseline measurement.
+- [ ] Test ranking, limit handling, and cold-start fallback behavior.
 
 ## Later phases — not started
 
-- [ ] Phase 4–9: baselines, models, evaluation, and cold start.
+- [ ] Phase 5–9: collaborative/content/hybrid models, evaluation, and cold start.
 - [ ] Phase 10–12: Flask, React, testing/robustness.
 - [ ] Phase 13–14: final documentation and QA.
