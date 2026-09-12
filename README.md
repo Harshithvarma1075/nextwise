@@ -4,7 +4,7 @@ An end-to-end, explainable product recommendation system for the NxtWise hiring 
 
 ## Status
 
-**Phase 5 complete — collaborative filtering.** A saved sparse item-based collaborative model produces personalized unseen-item candidates and has been evaluated on the same temporal protocol as the popularity baseline. Content/hybrid models, Flask, and React are not yet implemented.
+**Phase 6 complete — content-based filtering.** Saved CF and TF-IDF content models produce personalized unseen-item candidates and have been evaluated under one leakage-safe temporal protocol. Hybrid ranking, Flask, and React are not yet implemented.
 
 ## Frozen dataset
 
@@ -45,7 +45,7 @@ models/     Git-ignored generated model artifacts
 
 ## Next phase
 
-The next development phase is Phase 6: content-based filtering using the verified catalog metadata.
+The next development phase is Phase 7: combine the evaluated CF and content candidates in a validation-selected hybrid ranker.
 
 ## Disclosure
 
