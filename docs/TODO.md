@@ -32,15 +32,22 @@
 - [x] Establish and execute global temporal train/validation/test evaluation.
 - [x] Test ranking, limit handling, seen-item filtering, metrics, and split behavior.
 
-## Phase 5 — next: collaborative filtering
+## Phase 5 — complete: collaborative filtering
 
-- [ ] Build a sparse user-item interaction representation using the established temporal protocol.
-- [ ] Implement item-based similarity and personalized unseen-item candidate generation.
-- [ ] Handle unknown users, insufficient histories, empty candidates, and Top-N limits.
-- [ ] Test and evaluate CF against the recorded popularity baseline.
+- [x] Build a sparse binary user-item representation using the established temporal protocol.
+- [x] Implement item-based cosine similarity and personalized unseen-item candidate generation.
+- [x] Handle unknown users, empty candidates, seen filtering, and Top-N limits.
+- [x] Test and evaluate CF against the recorded popularity baseline.
+
+## Phase 6 — next: content-based filtering
+
+- [ ] Build a TF-IDF product representation from verified catalog metadata.
+- [ ] Implement content-based candidate generation from a user's history.
+- [ ] Handle empty metadata, unknown items/users, zero vectors, and seen filtering.
+- [ ] Evaluate content filtering under the same temporal protocol.
 
 ## Later phases — not started
 
-- [ ] Phase 6–9: content/hybrid models, full evaluation, and cold start.
+- [ ] Phase 7–9: hybrid model, full evaluation, and cold start.
 - [ ] Phase 10–12: Flask, React, testing/robustness.
 - [ ] Phase 13–14: final documentation and QA.

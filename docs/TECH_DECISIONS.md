@@ -54,3 +54,13 @@ No event weights, subset rule, model parameters, or metrics have been chosen.
 | Split | Global temporal 70% train / 15% validation / 15% test | Earlier events train the model; later windows remain unseen for evaluation. |
 | Test refit | Fit final baseline on train + validation before held-out test | Uses all data available before the test window without test leakage. |
 | Seen-item evaluation | Remove historical items from both recommendations and each user’s holdout relevance set | Avoids penalizing a model for intentionally enforcing seen-item filtering. |
+
+## Phase 5 decisions
+
+| Topic | Decision | Rationale |
+| --- | --- | --- |
+| CF signal | Binary user-item interaction incidence | Uses verified interaction history without inventing relative event weights before experimentation. |
+| Similarity | Item-item cosine similarity | Transparent: items are related when the same users interacted with both. |
+| Neighbor storage | Keep top 100 positive-scoring neighbors per item | Provides bounded, efficient online candidate generation without storing all pairwise scores. |
+| Similarity computation | Sparse normalized item matrix multiplication | Replaced slow brute-force nearest-neighbor fitting; maintains cosine semantics while completing feasibly on the full dataset. |
+| Unknown/empty user | Return no CF candidates | Lets the planned popularity cold-start layer handle users without history rather than fabricating personalized output. |
