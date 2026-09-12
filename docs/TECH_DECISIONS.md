@@ -86,3 +86,15 @@ No event weights, subset rule, model parameters, or metrics have been chosen.
 | Selection metric | Highest validation NDCG@10, then recall@10, precision@10, and greater CF weight | Optimizes ranked relevance with deterministic, documented ties. |
 | Selected blend | CF 1.00, content 0.00 | This was the best validation result. A content-inclusive blend did not outperform pure CF. |
 | Invalid/incomplete state | Fail on malformed interaction/catalog inputs or mismatched component catalogs; unknown users return no hybrid candidates | Prevents silently mixing incompatible artifacts; later cold-start handling remains explicit. |
+
+## Phase 8 decisions
+
+| Topic | Decision | Rationale |
+| --- | --- | --- |
+| Audit scope | Evaluate fixed Phase 4–7 artifacts; do not tune on test data | Separates evidence collection from model selection and preserves the holdout's integrity. |
+| Uncertainty | 1,000 deterministic user-level bootstrap resamples with 95% percentile intervals | Reports stability of mean ranking metrics rather than a single point estimate alone. |
+| Model comparison | Paired per-user NDCG@10 bootstrap differences | Models are evaluated on the same users, so paired differences are more informative than comparing separate intervals. |
+| Robustness slices | 2–8, 9–12, and 13–15 distinct pre-test history items | Boundaries are derived from the pre-test history distribution, not selected for favorable test results. |
+| Coverage/diversity | Report catalog coverage and category-level-2 intra-list diversity descriptively | Adds product exposure and list-variety context without pretending they measure relevance. |
+| Artifact reliability | Regenerate Joblib artifacts through `src.*` module imports and load them in a fresh process | Prevents failures caused by serializing classes as `__main__`; configuration and reported metrics remain unchanged. |
+| CF-only fast path | Skip content scoring when CF weight is 1.00 (and vice versa for 0.00) | Exact same output with lower serving work; the selected blend is CF-only. |

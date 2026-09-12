@@ -53,8 +53,15 @@
 - [x] Select blend weight on validation only and evaluate once on untouched test data.
 - [x] Save the final hybrid artifact and documented, executed experiment results.
 
+## Phase 8 — complete: evaluation and robustness audit
+
+- [x] Audit all fixed model artifacts on the untouched test window without tuning.
+- [x] Add bootstrap uncertainty, paired model differences, history slices, coverage, and diversity measures.
+- [x] Verify artifact loading in a fresh process and repair stable artifact serialization.
+- [x] Document evidence, limitations, and the interview-ready interpretation of results.
+
 ## Later phases — not started
 
-- [ ] Phase 8–9: full evaluation/robustness and cold start.
+- [ ] Phase 9: cold start.
 - [ ] Phase 10–12: Flask, React, testing/robustness.
 - [ ] Phase 13–14: final documentation and QA.
