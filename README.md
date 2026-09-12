@@ -4,7 +4,7 @@ An end-to-end, explainable product recommendation system for the NxtWise hiring 
 
 ## Status
 
-**Phase 4 complete — popularity baseline.** A saved global-popularity artifact, Top-N retrieval with seen-item filtering, and real temporal evaluation are in place. Collaborative/content/hybrid models, Flask, and React are not yet implemented.
+**Phase 5 complete — collaborative filtering.** A saved sparse item-based collaborative model produces personalized unseen-item candidates and has been evaluated on the same temporal protocol as the popularity baseline. Content/hybrid models, Flask, and React are not yet implemented.
 
 ## Frozen dataset
 
@@ -45,7 +45,7 @@ models/     Git-ignored generated model artifacts
 
 ## Next phase
 
-The next development phase is Phase 5: item-based collaborative filtering.
+The next development phase is Phase 6: content-based filtering using the verified catalog metadata.
 
 ## Disclosure
 
