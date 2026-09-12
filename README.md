@@ -1,50 +1,52 @@
-# H&M hybrid product recommender
+# Amazon Retail Demo Store hybrid recommender
 
-A practical, explainable recommendation-system project for the NxtWise hiring assessment. It will combine item-based collaborative filtering and metadata-based content recommendations, then evaluate a normalized hybrid ranker.
+An end-to-end, explainable product recommendation system for the NxtWise hiring assessment. The system will combine item-based collaborative filtering with TF-IDF content similarity using the frozen Amazon Retail Demo Store synthetic e-commerce dataset.
 
 ## Status
 
-**Phase 0 complete — H&M project foundation.** The earlier Retailrocket work was retired. No H&M dataset has been downloaded or inspected, and no preprocessing, database schema, ML model, API, or React feature has been implemented.
+**Phase 4 complete — popularity baseline.** A saved global-popularity artifact, Top-N retrieval with seen-item filtering, and real temporal evaluation are in place. Collaborative/content/hybrid models, Flask, and React are not yet implemented.
 
-## Fixed stack
+## Frozen dataset
 
-- Python, Flask, and a REST API
-- MySQL for application data
-- Pandas, NumPy, SciPy, scikit-learn, Joblib
-- Pytest
-- React + Vite, preferably TypeScript when practical
+`data/raw/amazon_retail_demo/` contains:
+
+- `interactions.csv`
+- `items.csv`
+- `users.csv`
+
+This is the only permitted dataset. Raw files are Git-ignored and must never be edited.
+
+## Planned stack
+
+Python, Flask, MySQL, Pandas, NumPy, SciPy, scikit-learn, Joblib, Pytest, React, and Vite.
 
 ## Target architecture
 
 ```text
-H&M dataset → inspection → preprocessing → processed users/products/transactions
-                                      ├→ item-based CF
-                                      └→ TF-IDF content model
-                                            ↓
-                              normalized hybrid ranking → artifacts
+Raw CSVs → validation/preprocessing → processed users, items, interactions
+                                   ├→ sparse item-based CF
+                                   └→ TF-IDF content model
+                                         ↓
+                            normalized hybrid ranker → Top-N
 
-React → Flask → recommendation service → MySQL + saved artifacts
+React → Flask REST API → recommendation service → MySQL + model artifacts
 ```
 
-## Repository layout
+## Layout
 
 ```text
-app/          Future Flask layers
-config/       Future application configuration
-data/raw/     Local H&M source data (Git-ignored)
-data/processed/ Generated datasets (Git-ignored)
-docs/         Source-of-truth documentation
-frontend/     Future React/Vite application
-ml/           Future offline pipeline and models
-models/       Generated model artifacts (Git-ignored)
-scripts/      Operational scripts
-tests/        Automated tests
+backend/    Future Flask application and backend tests
+src/        Future offline preprocessing, models, training, evaluation
+data/       Git-ignored raw and generated data
+docs/       Project source of truth
+frontend/   Future React/Vite interface
+models/     Git-ignored generated model artifacts
 ```
 
-## Next step
+## Next phase
 
-Phase 1 will acquire and inspect the actual H&M files before selecting a reproducible working subset or making data-dependent decisions.
+The next development phase is Phase 5: item-based collaborative filtering.
 
 ## Disclosure
 
-The project is developed with AI coding assistance. The final README will disclose the dataset, libraries, external resources, and AI assistance used.
+This project uses the Amazon Retail Demo Store synthetic e-commerce dataset and AI coding assistance. Final documentation will disclose all libraries and external resources used.
