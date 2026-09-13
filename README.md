@@ -61,26 +61,7 @@ Raw data is immutable and Git-ignored. The reproducible preprocessing pipeline w
 
 ## System architecture
 
-```text
-Amazon Retail Demo Store CSVs
-          │
-          ▼
-Validation + preprocessing ───► MySQL
-          │                      │
-          ▼                      ▼
-Saved model artifacts      Catalog, users, recent events
-Popularity │ CF │ Content │ Hybrid     │
-          └───────────────┬───────────┘
-                          ▼
-                   Flask REST API
-                          │
-                          ▼
-                React Recommendation Studio
-             ┌────────────┴────────────┐
-             ▼                         ▼
-    Known user + history       New/unknown demo user
-     personalized CF route       popularity cold start
-```
+![NxtWise Recommendation Studio architecture diagram](docs/architecture.png)
 
 The API never stores sparse matrices or model artifacts in MySQL. It reads saved model files locally and uses parameterized, read-only SQL queries to enrich returned product IDs with verified catalog information.
 
