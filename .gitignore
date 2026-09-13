@@ -23,6 +23,14 @@ models/*
 # Frontend
 frontend/node_modules/
 frontend/dist/
+frontend/src/components
+frontend/src/pages
+frontend/src/services
+frontend/package-lock.json
+frontend/package.json
+frontend/vite.config.js
+
+
 
 # Editors and operating systems
 .vscode/
