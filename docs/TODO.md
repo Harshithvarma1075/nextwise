@@ -74,7 +74,28 @@
 - [x] Create a simple React/Vite UI for dataset-user sign-in, model comparison, product cards, and temporary cold-start demos.
 - [x] Add API contract tests, build the UI, and verify all routes against the real MySQL catalog and saved artifacts.
 
-## Later phases — not started
+## Phase 11 — complete: activity explanation and final API integration test
 
-- [ ] Phase 11–12: integration testing, UI refinement, and final robustness.
-- [ ] Phase 13–14: final documentation and QA.
+- [x] Expose recent real user events with product context through a validated API endpoint.
+- [x] Show event history and the model-signal explanation in the React UI.
+- [x] Add and execute an opt-in final live API test against MySQL and saved artifacts.
+- [x] Replace the README with a complete, presentation-ready project guide.
+
+## Phase 12 — complete: final QA and review preparation
+
+- [x] Execute the complete backend suite with the opt-in live MySQL/artifact integration test enabled.
+- [x] Verify backend compilation, real API routes, fresh artifact loading, UI production build, dependency audit, and whitespace checks.
+- [x] Record test scope, resolved defects, and the one non-blocking dependency warning in `QA_REPORT.md`.
+- [x] Prepare a reviewer walkthrough that distinguishes personalized recommendations, activity context, model comparison, and cold start.
+
+## Phase 13 — complete: professional project documentation
+
+- [x] Produce a detailed README with setup, architecture, API, usage, results, and evaluation links.
+- [x] Add a final project report, reviewer/user guide, QA report, and delivery checklist.
+- [x] Update API, architecture, decisions, project specification, handoff, and TODO records to include activity visibility and live integration coverage.
+
+## Phase 14 — complete: delivery verification
+
+- [x] Reconcile all delivery documentation with the executed `41 passed` final verification evidence.
+- [x] Freeze model-selection and test-set boundaries for the submitted version.
+- [x] Confirm no functional blocker remains; retain the NumPy/Joblib warning as an explicit future maintenance item.

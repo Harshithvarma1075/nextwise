@@ -119,3 +119,12 @@ No event weights, subset rule, model parameters, or metrics have been chosen.
 | Error handling | Structured JSON errors with 400/404/503/500 boundaries; log unexpected errors server-side only | Keeps API responses clear and prevents tracebacks or credentials leaking to the UI. |
 | CORS | Allow only `localhost:5173` and `127.0.0.1:5173` local Vite origins by default | Enables local development without broadly opening the API to arbitrary browser origins. |
 | UI scope | Simple single-page user selection, model comparison, route label, cards, loading and error states | Makes model behavior explainable during review without claiming content/hybrid is the top-performing choice. |
+
+## Phase 11 decisions
+
+| Topic | Decision | Rationale |
+| --- | --- | --- |
+| Activity visibility | Show the latest eight real MySQL interaction events beside a selected user | Makes the recommendation demonstration interpretable without inventing a causal explanation for an individual item. |
+| Activity ordering | Newest-first event timestamp, then interaction ID | Deterministic presentation of the most recent observed behavior. |
+| Event explanation | Preserve exact event types and state that all are binary CF signals | The UI must not imply that views are purchases or that purchases are the only model input. |
+| Final API verification | Add opt-in real integration coverage gated by `RUN_LIVE_API_TESTS=1` | Keeps normal tests fast and self-contained while providing an explicit review-ready test against local MySQL and artifacts. |
