@@ -84,6 +84,22 @@ Popularity │ CF │ Content │ Hybrid     │
 
 The API never stores sparse matrices or model artifacts in MySQL. It reads saved model files locally and uses parameterized, read-only SQL queries to enrich returned product IDs with verified catalog information.
 
+## Interface preview
+
+The reviewer interface keeps the recommendation workflow visible: select a dataset user, inspect recorded activity, choose a method, and generate a labeled Top-10 list. When a list is ready, the page moves directly to the result heading; recent activity initially stays compact and can be expanded when needed.
+
+![NxtWise Recommendation Studio dashboard, before a shopper is selected](docs/dashboard.png)
+
+*Dashboard state: user selection and method selection are available before ranking begins.*
+
+![Selected dataset user with compact real activity history](docs/user_history.png)
+
+*Known-user state: recent events are factual context from the dataset, not a claim that one event caused one recommendation.*
+
+![Personalized collaborative-filtering recommendations](docs/recommendations.png)
+
+*Result state: a visible route label distinguishes personalized rankings from cold-start popularity output.*
+
 ## Setup instructions
 
 ### 1. Prerequisites
