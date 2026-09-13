@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000/api'
 const algorithms = [
@@ -37,13 +37,17 @@ function formatActivityTime(value) {
 }
 
 function ActivityPanel({ profile, activity, loading }) {
+  const [expanded, setExpanded] = useState(false)
+  useEffect(() => { setExpanded(false) }, [profile?.user_id])
   if (!profile) return null
+  const visibleActivity = expanded ? activity : activity.slice(0, 3)
   return <aside className="activity-panel">
     <div className="activity-heading"><span>RECENT ACTIVITY</span><small>{profile.is_demo ? 'NEW USER' : 'RECORDED HISTORY'}</small></div>
     {profile.is_demo && <p className="activity-empty">No recorded activity yet. Recommendations use the popularity fallback.</p>}
     {loading && <p className="activity-empty">Loading recorded interactions…</p>}
     {!loading && !profile.is_demo && activity.length === 0 && <p className="activity-empty">No recent interactions were found.</p>}
-    {!loading && !profile.is_demo && activity.map((event) => <div className="activity-row" key={`${event.item_id}-${event.event_timestamp}-${event.event_type}`}><span className={`event event-${event.event_type.toLowerCase()}`}>{event.event_type}</span><div><strong>{event.product_name}</strong><small>{event.category_l2} · {formatActivityTime(event.event_timestamp)}</small></div></div>)}
+    {!loading && !profile.is_demo && visibleActivity.map((event) => <div className="activity-row" key={`${event.item_id}-${event.event_timestamp}-${event.event_type}`}><span className={`event event-${event.event_type.toLowerCase()}`}>{event.event_type}</span><div><strong>{event.product_name}</strong><small>{event.category_l2} · {formatActivityTime(event.event_timestamp)}</small></div></div>)}
+    {!loading && !profile.is_demo && activity.length > 3 && <button className="activity-toggle" onClick={() => setExpanded((value) => !value)} aria-expanded={expanded}>{expanded ? 'Show recent 3 events' : `Show all ${activity.length} recent events`}</button>}
     {!profile.is_demo && <p className="activity-footnote">All listed events are used as recorded behavioral history; the CF model does not treat purchases as the only signal.</p>}
   </aside>
 }
@@ -59,6 +63,7 @@ export default function App() {
   const [loadingRecommendations, setLoadingRecommendations] = useState(false)
   const [loadingActivity, setLoadingActivity] = useState(false)
   const [error, setError] = useState('')
+  const resultsRef = useRef(null)
 
   const findUsers = async (event) => {
     event?.preventDefault()
@@ -71,6 +76,15 @@ export default function App() {
   }
 
   useEffect(() => { findUsers() }, [])
+
+  useEffect(() => {
+    if (!recommendation) return undefined
+    const timer = window.setTimeout(() => {
+      resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      resultsRef.current?.focus({ preventScroll: true })
+    }, 0)
+    return () => window.clearTimeout(timer)
+  }, [recommendation])
 
   const chooseUser = async (user) => {
     setProfile({ ...user, is_demo: false })
@@ -91,7 +105,7 @@ export default function App() {
 
   const getRecommendations = async () => {
     if (!profile) { setError('Choose a dataset user or create a new demo user first.'); return }
-    setLoadingRecommendations(true); setError('')
+    setLoadingRecommendations(true); setRecommendation(null); setError('')
     try {
       const userParam = profile.is_demo ? '' : `&user_id=${profile.user_id}`
       const data = await api(`/recommendations?algorithm=${algorithm}&limit=10${userParam}`)
@@ -117,12 +131,14 @@ export default function App() {
       <section className="results-panel">
         <div className="panel-heading"><span>02</span><h2>Select the method</h2></div>
         <div className="algorithm-grid">{algorithms.map((item) => <button key={item.id} className={`algorithm ${algorithm === item.id ? 'active' : ''}`} onClick={() => { setAlgorithm(item.id); setRecommendation(null) }}><strong>{item.name}</strong><span>{item.detail}</span></button>)}</div>
-        <div className="profile-bar"><div>{profile ? <><span className="profile-label">ACTIVE SHOPPER</span><strong>{profile.is_demo ? 'New demo user' : `Dataset user ${profile.user_id}`}</strong><small>{profile.is_demo ? 'No history — popularity fallback will be used.' : `Age ${profile.age} · ${profile.gender}`}</small></> : <><span className="profile-label">NO SHOPPER SELECTED</span><strong>Pick a user to begin</strong></>}</div><button className="primary" onClick={getRecommendations} disabled={loadingRecommendations || loadingActivity}>{loadingRecommendations ? 'Building list…' : 'Get recommendations'}</button></div>
+        <div className="profile-bar"><div>{profile ? <><span className="profile-label">ACTIVE SHOPPER</span><strong>{profile.is_demo ? 'New demo user' : `Dataset user ${profile.user_id}`}</strong><small>{profile.is_demo ? 'No history — popularity fallback will be used.' : `Age ${profile.age} · ${profile.gender}`}</small></> : <><span className="profile-label">NO SHOPPER SELECTED</span><strong>Pick a user to begin</strong><small>Then choose a method and generate a ranked Top-10 list.</small></>}</div><button className="primary" onClick={getRecommendations} disabled={!profile || loadingRecommendations || loadingActivity}>{loadingRecommendations ? 'Ranking Top 10…' : 'Generate Top 10'}</button></div>
         {error && <div className="error" role="alert">{error}</div>}
         <ActivityPanel profile={profile} activity={activity} loading={loadingActivity} />
-        {!recommendation && !loadingRecommendations && <div className="empty"><span>⌁</span><h2>Ready when you are.</h2><p>{selectedAlgorithm.detail} Choose a shopper, then request a Top-10 list.</p></div>}
-        {loadingRecommendations && <div className="empty"><span className="spinner" /><h2>Ranking products…</h2><p>Using the saved {selectedAlgorithm.name.toLowerCase()} model.</p></div>}
-        {recommendation && <><div className="result-summary"><div><span className={`route ${recommendation.personalized ? 'personalized' : ''}`}>{recommendation.personalized ? 'PERSONALIZED' : 'COLD START'}</span><strong>{recommendation.route.replaceAll('_', ' ')}</strong></div><p>{recommendation.personalized ? 'Products are ranked from the chosen model and this shopper’s recorded behavior.' : 'This shopper has no recorded behavior, so the global popularity fallback is shown.'}</p></div><div className="product-grid">{recommendation.recommendations.map((product, index) => <ProductCard product={product} index={index} key={product.item_id} />)}</div></>}
+        <section className="recommendation-output" ref={resultsRef} tabIndex="-1" aria-labelledby="recommendations-heading">
+          {!recommendation && !loadingRecommendations && <div className="empty"><span>⌁</span><h2>Ready when you are.</h2><p>{selectedAlgorithm.detail} Choose a shopper, then generate a ranked Top-10 list.</p></div>}
+          {loadingRecommendations && <div className="empty" aria-live="polite"><span className="spinner" /><h2>Ranking products…</h2><p>Using the saved {selectedAlgorithm.name.toLowerCase()} model. Your results will appear here automatically.</p></div>}
+          {recommendation && <><div className="result-summary"><div><span className={`route ${recommendation.personalized ? 'personalized' : ''}`}>{recommendation.personalized ? 'PERSONALIZED' : 'COLD START'}</span><h2 id="recommendations-heading">Top {recommendation.count} recommendations are ready</h2><strong>{recommendation.route.replaceAll('_', ' ')}</strong></div><p>{recommendation.personalized ? 'Products are ranked from the chosen model and this shopper’s recorded behavior.' : 'This shopper has no recorded behavior, so the global popularity fallback is shown.'}</p></div><div className="product-grid">{recommendation.recommendations.map((product, index) => <ProductCard product={product} index={index} key={product.item_id} />)}</div></>}
+        </section>
       </section>
     </section>
     <footer>Evaluation note: hybrid is displayed for comparison; validation selected a CF-only blend. New demo users are temporary and are not written to MySQL.</footer>
