@@ -4,7 +4,7 @@ An end-to-end, explainable product recommendation system for the NxtWise hiring 
 
 ## Status
 
-**Phase 9 complete — cold-start routing.** The system now uses personalized CF for known users with usable history and a safe popularity fallback for anonymous, unknown, or exhausted-personalization cases. Flask and React are not yet implemented.
+**Phase 10 complete — Flask API and React UI.** The application serves saved CF, content, and hybrid model results through a validated API, hydrates results from MySQL, and provides a simple interactive demonstration including cold start.
 
 ## Frozen dataset
 
@@ -35,17 +35,38 @@ React → Flask REST API → recommendation service → MySQL + model artifacts
 ## Layout
 
 ```text
-backend/    Future Flask application and backend tests
-src/        Future offline preprocessing, models, training, evaluation
+backend/    Flask application, MySQL repository, API service, and backend tests
+src/        Offline preprocessing, models, training, evaluation, and cold-start routing
 data/       Git-ignored raw and generated data
 docs/       Project source of truth
-frontend/   Future React/Vite interface
+frontend/   React/Vite recommendation demonstration UI
 models/     Git-ignored generated model artifacts
 ```
 
 ## Next phase
 
-The next development phase is Phase 10: implement the Flask recommendation API around the saved cold-start router and MySQL product data.
+## Run locally
+
+1. Ensure MySQL is running and `.env` contains the already configured database credentials.
+2. Start the API from the project root:
+
+   ```powershell
+   C:\Users\Harshith Varma\AppData\Local\Python\pythoncore-3.14-64\python.exe -m flask --app backend.run run --host 127.0.0.1 --port 5000
+   ```
+
+3. In a second terminal, start the UI:
+
+   ```powershell
+   cd frontend
+   npm install
+   npm run dev
+   ```
+
+Open `http://127.0.0.1:5173`. Select a dataset user and choose CF, content, or hybrid to compare outputs. “Create new demo user” is intentionally not saved to MySQL; it demonstrates the popularity cold-start route without modifying the evaluation dataset.
+
+## Next phase
+
+The next development phase is Phase 11: strengthen API/UI integration tests and operational robustness.
 
 ## Disclosure
 
