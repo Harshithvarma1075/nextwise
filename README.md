@@ -206,3 +206,23 @@ The final live test checks health, real catalog users, CF/content/hybrid routes,
 - Metrics are executed results, not estimates. See [docs/EVALUATION.md](docs/EVALUATION.md).
 - Model artifacts and raw data are intentionally Git-ignored.
 - Delivery status: Phases 0–14 are complete. The model-selection boundary is frozen; future work should be maintenance or a separately documented new experiment, never test-set retuning.
+
+
+## References and acknowledgements
+
+### Dataset
+
+- **Amazon Retail Demo Store synthetic e-commerce dataset** — the sole project dataset. The raw source files are [interactions.csv](https://code.retaildemostore.retail.aws.dev/csvs/interactions.csv), [items.csv](https://code.retaildemostore.retail.aws.dev/csvs/items.csv), and [users.csv](https://code.retaildemostore.retail.aws.dev/csvs/users.csv). They are downloaded and retained unchanged; all project transformations are performed by reproducible local scripts.
+
+### Core libraries and frameworks
+
+- [Python](https://www.python.org/), [Pandas](https://pandas.pydata.org/), [NumPy](https://numpy.org/), and [SciPy](https://scipy.org/) for validation, preprocessing, sparse data processing, and analysis.
+- [scikit-learn](https://scikit-learn.org/) for TF-IDF features and nearest-neighbor/cosine-similarity utilities; [Joblib](https://joblib.readthedocs.io/) for saved model artifacts.
+- [Flask](https://flask.palletsprojects.com/) and the MySQL Python connector for the REST API and catalog access.
+- [MySQL](https://www.mysql.com/) for relational user, product, and interaction data.
+- [React](https://react.dev/) and [Vite](https://vite.dev/) for the reviewer-facing web interface.
+- [Pytest](https://docs.pytest.org/) for unit, contract, and opt-in live integration tests.
+
+### AI assistance disclosure
+
+This project was developed with assistance from **OpenAI Codex** , **claude** for implementation support, debugging, test design, and documentation drafting. Dataset inspection, preprocessing decisions, executed experiments, metric values, and final verification results are represented only when produced from the project’s local code and configured data; AI assistance did not replace empirical evaluation.
