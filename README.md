@@ -209,4 +209,4 @@ The final live test checks health, real catalog users, CF/content/hybrid routes,
 - This project uses a synthetic e-commerce dataset and AI coding assistance.
 - Metrics are executed results, not estimates. See [docs/EVALUATION.md](docs/EVALUATION.md).
 - Model artifacts and raw data are intentionally Git-ignored.
-- The next work is Phase 12: final QA and documentation polish without reopening model selection on the test set.
+- Delivery status: Phases 0–14 are complete. The model-selection boundary is frozen; future work should be maintenance or a separately documented new experiment, never test-set retuning.
