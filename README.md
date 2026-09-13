@@ -228,4 +228,4 @@ The final live test checks health, real catalog users, CF/content/hybrid routes,
 
 ### AI assistance disclosure
 
-This project was developed with assistance from **OpenAI Codex** for implementation support, debugging, test design, and documentation drafting. Dataset inspection, preprocessing decisions, executed experiments, metric values, and final verification results are represented only when produced from the project’s local code and configured data; AI assistance did not replace empirical evaluation.
+This project was developed with assistance from **OpenAI Codex** , **claude** for implementation support, debugging, test design, and documentation drafting. Dataset inspection, preprocessing decisions, executed experiments, metric values, and final verification results are represented only when produced from the project’s local code and configured data; AI assistance did not replace empirical evaluation.
