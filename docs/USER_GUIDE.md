@@ -33,10 +33,10 @@ Exact commands are maintained in [README.md](../README.md).
 ## Demonstrating a known dataset user
 
 1. Select one user from the list, or type a numeric ID prefix and select **Find**.
-2. Wait for the **Recent activity** panel to load. It displays newest events first.
+2. Wait for the **Recent activity** panel to load. It displays the newest three events first; use **Show all recent events** to expand the complete eight-event context when useful.
 3. Read the event labels literally. For example, `View` is a view; it is not a purchase. `AddToCart`, `ViewCart`, `StartCheckout`, and `Purchase` preserve their exact dataset meanings.
-4. Select **Collaborative filtering** and press **Get recommendations**.
-5. Confirm the green `PERSONALIZED` label and the `collaborative filter` route.
+4. Select **Collaborative filtering** and press **Generate Top 10**.
+5. The page moves to **Top 10 recommendations are ready**. Confirm the green `PERSONALIZED` label and the `collaborative filter` route.
 6. Switch to **Content-based** and repeat to show that it uses catalog similarity, not shared-user behavior.
 7. Switch to **Hybrid (selected)** and repeat. Explain that validation selected CF-only because content did not improve NDCG@10 in this experiment.
 

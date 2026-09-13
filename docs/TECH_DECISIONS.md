@@ -128,3 +128,11 @@ No event weights, subset rule, model parameters, or metrics have been chosen.
 | Activity ordering | Newest-first event timestamp, then interaction ID | Deterministic presentation of the most recent observed behavior. |
 | Event explanation | Preserve exact event types and state that all are binary CF signals | The UI must not imply that views are purchases or that purchases are the only model input. |
 | Final API verification | Add opt-in real integration coverage gated by `RUN_LIVE_API_TESTS=1` | Keeps normal tests fast and self-contained while providing an explicit review-ready test against local MySQL and artifacts. |
+
+## Phase 12 UX refinement
+
+| Topic | Decision | Rationale |
+| --- | --- | --- |
+| Result visibility | Smooth-scroll and focus the result region after a successful ranking response | A successful Top-10 list must be visible without requiring a first-time reviewer to discover that it was rendered below the activity panel. |
+| Activity density | Show the newest three events initially and allow expansion to the loaded eight events | Retains truthful behavioral context while preventing repeated event rows from obscuring the primary recommendation outcome. |
+| Result confirmation | Present a `Top N recommendations are ready` heading and route label | Gives an explicit completion signal, works with keyboard focus/assistive technology, and distinguishes personalized from cold-start output. |
