@@ -2,10 +2,6 @@
 
 > An explainable product recommendation system that lets reviewers compare collaborative filtering, content-based recommendations, and the validation-selected hybrid—using real catalog data and transparent cold-start behavior.
 
-| Project status | Dataset | Best validated personalized model |
-| --- | --- | --- |
-| **Phase 11 complete** | Amazon Retail Demo Store synthetic e-commerce data | **Item-based collaborative filtering** |
-
 ---
 
 ## Project overview
@@ -211,6 +207,10 @@ The final live test checks health, real catalog users, CF/content/hybrid routes,
 - Model artifacts and raw data are intentionally Git-ignored.
 - Delivery status: Phases 0–14 are complete. The model-selection boundary is frozen; future work should be maintenance or a separately documented new experiment, never test-set retuning.
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4c06dc4b9c324c12bea51d887861ba7aed30fc59
 ## References and acknowledgements
 
 ### Dataset
