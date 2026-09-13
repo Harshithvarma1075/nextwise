@@ -108,3 +108,14 @@ No event weights, subset rule, model parameters, or metrics have been chosen.
 | Seen-item filtering | Apply the same seen-item exclusion to both personalized and popularity routes | Prevents the fallback from violating the product requirement. |
 | Response provenance | Return `personalized_cf` or `popularity_cold_start` with each result | Makes serving behavior auditable and lets the UI explain fallback output honestly. |
 | Cold-start evaluation | Test routing, output count, determinism, and seen filtering; do not report relevance metrics | The dataset has no future labels for genuine new users, so relevance scoring would be fabricated. |
+
+## Phase 10 decisions
+
+| Topic | Decision | Rationale |
+| --- | --- | --- |
+| API design | One validated recommendation endpoint with an explicit `algorithm` value: `cf`, `content`, or `hybrid` | Lets the UI demonstrate each implemented recommender without duplicating response contracts. |
+| Catalog hydration | Retrieve recommendation product details through parameterized, read-only MySQL queries | Recommendations are model item IDs; verified product data remains in the database and no SQL is built from user input. |
+| Demo user | Validate but do not persist a new demo user | Demonstrates true cold start while avoiding fake interaction/user records in the governed dataset database. |
+| Error handling | Structured JSON errors with 400/404/503/500 boundaries; log unexpected errors server-side only | Keeps API responses clear and prevents tracebacks or credentials leaking to the UI. |
+| CORS | Allow only `localhost:5173` and `127.0.0.1:5173` local Vite origins by default | Enables local development without broadly opening the API to arbitrary browser origins. |
+| UI scope | Simple single-page user selection, model comparison, route label, cards, loading and error states | Makes model behavior explainable during review without claiming content/hybrid is the top-performing choice. |

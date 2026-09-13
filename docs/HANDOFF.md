@@ -2,7 +2,7 @@
 
 ## Current phase
 
-Phase 9 — cold-start routing complete.
+Phase 10 — Flask API and React UI complete.
 
 ## Completed
 
@@ -23,10 +23,12 @@ Phase 9 — cold-start routing complete.
 - Regenerated saved Joblib artifacts through stable `src.*` imports and verified they load in a new Python process.
 - Added `src/cold_start.py`, which routes known users to the selected CF-only model and unknown/anonymous/empty-candidate cases to popularity with explicit provenance labels.
 - Added cold-start behavior tests and saved a fresh-process-loadable router artifact.
+- Added a Flask application factory, configuration, API routes, model service, and parameterized MySQL repository.
+- Added a React/Vite UI with existing-user selection, CF/content/hybrid comparison, rendered catalog cards, visible route labels, and a non-persistent new-user cold-start demonstration.
 
 ## Files changed
 
-`src/cold_start.py`, `backend/tests/test_cold_start.py`, `README.md`, `docs/EVALUATION.md`, `docs/TECH_DECISIONS.md`, `docs/TODO.md`, and `docs/HANDOFF.md`. Generated model/evaluation files remain Git-ignored.
+`backend/app/`, `backend/run.py`, `backend/tests/test_api.py`, `frontend/`, `README.md`, `docs/API_CONTRACT.md`, `docs/ARCHITECTURE.md`, `docs/TECH_DECISIONS.md`, `docs/TODO.md`, and `docs/HANDOFF.md`.
 
 ## Dataset facts and outputs
 
@@ -39,6 +41,7 @@ Phase 9 — cold-start routing complete.
 - Phase 8 paired bootstrap result: hybrid minus popularity NDCG@10 difference 0.335995, 95% CI [0.322371, 0.349737]; all values are executed, not inferred.
 - Hybrid history-slice NDCG@10: 0.397143 for 2–8 history items (286 users), 0.304601 for 9–12 (1,520), and 0.489905 for 13–15 (469). CF/hybrid exposed 2,454 of 2,465 catalog items (99.55%) across all test Top-10 lists.
 - Cold-start routing audit retained personalized CF for all 2,275 eligible test users (zero fallback) with unchanged NDCG@10 0.354436. Simulated anonymous and unknown users each received 10 popularity items and seen-item filtering passed. No cold-start relevance metric is claimed because the frozen data contains no real-new-user future labels.
+- Live API verification against configured MySQL returned HTTP 200 for health plus CF, content, hybrid, and cold-start recommendations. The UI visual walk-through rendered both personalized cards and a labeled cold-start fallback.
 
 ## Important decisions
 
@@ -50,6 +53,7 @@ Phase 9 — cold-start routing complete.
 - Hybrid source scores are independently max-normalized per user; its 21 weights (CF 0.00–1.00 in 0.05 increments) are selected by validation NDCG@10, then recall, precision, and CF weight. Test data is never used for selection.
 - Phase 8 uses 1,000 deterministic, user-level bootstrap resamples for 95% CIs. Coverage and category-level-2 diversity are descriptive diagnostics, not optimization objectives.
 - Cold-start responses expose `personalized_cf` or `popularity_cold_start`; MySQL/API phases can use this provenance without inferring user preferences.
+- The API supports `algorithm=cf|content|hybrid`, uses safe structured errors, and hydrates model item IDs with real MySQL catalog fields. New demo users are intentionally non-persistent.
 
 ## Tests and checks
 
@@ -58,6 +62,8 @@ Phase 9 — cold-start routing complete.
 - `python -m pytest backend/tests -q`: **30 passed** after Phase 7, including the **4** new hybrid-model tests.
 - `python -m pytest backend/tests -q`: **33 passed** after Phase 8, including the **3** new robustness-audit tests. Fresh-process loading of all three Joblib artifacts also passes.
 - `python -m pytest backend/tests -q`: **36 passed** after Phase 9, including the **3** new cold-start tests. The regenerated `cold_start_router.joblib` also loads and returns fallback results in a fresh process.
+- `python -m pytest backend/tests -q`: **39 passed** after Phase 10, including the **3** API contract tests. Backend compilation, frontend production build, and frontend production dependency audit all pass with zero reported vulnerabilities.
+- Fresh-process live verification against MySQL succeeds for health plus CF, content, hybrid, and cold-start routes with hydrated Top-3 results.
 - `python -m src.collaborative --k 10 --max-neighbors 100` completed and wrote `collaborative_filter.joblib` and its evaluation report. `git diff --check` passes.
 
 ## Resolved issues
@@ -72,14 +78,15 @@ Phase 9 — cold-start routing complete.
 8. The initial hybrid grid loop recomputed content candidates for every one of 21 weights, creating long-running duplicate attempts when the command launcher returned early. Weight selection now caches source candidates once per user; only the lightweight blending/ranking is repeated per weight. The duplicate Phase 7 processes were stopped before the successful clean run.
 9. Phase 8 discovered saved Joblib artifacts could not load in a fresh process because earlier runs serialized model classes as `__main__`. All model artifacts were regenerated via stable `src.*` imports with unchanged settings and matching recorded metrics; fresh-process loading now passes. Hybrid skips zero-weight source scoring, which preserves the selected CF-only output and reduces serving work.
 10. The initial Phase 9 router artifact had the same `__main__` serialization issue. It was regenerated through a stable `src.cold_start` import; the fresh-process router check now passes with unchanged NDCG and fallback routing results.
+11. The first visual UI run exposed a CORS mismatch: Vite was served at `127.0.0.1` but the API allowed only `localhost`. The API now accepts both explicit local origins, with a regression test and successful browser verification.
 
 ## Known issues
 
-- No Phase 9 blockers remain. Cold-start routing makes every anonymous/unknown user eligible for a popularity response; it does not make the fallback personalized. Content is available for all eligible users but does not improve CF in the tested normalized blend, so the saved hybrid intentionally selects CF-only. Bootstrap results support the CF advantage on this held-out synthetic dataset but do not guarantee production performance.
+- No Phase 10 blockers remain. The UI requires local MySQL and saved model artifacts; API failures are surfaced as safe actionable messages. Cold-start availability does not make fallback output personalized. Content remains available for comparison but does not improve CF in the validated hybrid.
 
 ## Next phase
 
-Phase 10: implement a Flask recommendation API around the saved cold-start router and validated MySQL product records.
+Phase 11: expand integration tests and refine the user-facing review workflow without changing frozen-model decisions.
 
 ## Do not change
 
@@ -91,3 +98,4 @@ Phase 10: implement a Flask recommendation API around the saved cold-start route
 - Do not replace the selected CF-only hybrid with a content blend unless a new validation experiment is executed and documented.
 - Do not tune model weights, similarity parameters, or TF-IDF fields against the Phase 8 test results.
 - Do not report a new-user relevance score without real post-recommendation interaction labels.
+- Do not persist demo users or invented interactions to MySQL merely to make a UI demonstration appear personalized.

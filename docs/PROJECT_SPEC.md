@@ -23,4 +23,4 @@ Python + Flask, MySQL, Pandas, NumPy, SciPy, scikit-learn, Joblib, Pytest, React
 
 ## Current boundary
 
-Phase 0 is complete. Only project foundation files and empty source directories exist; no Phase 1 EDA or executable application code has been implemented.
+Phase 10 is complete. The frozen dataset has reproducible preprocessing, MySQL loading, popularity/CF/content/hybrid artifacts, a validation-selected CF-only hybrid, cold-start routing, evaluation/robustness evidence, a Flask API, and a React/Vite demonstration UI. The next work is integration hardening and final review preparation; do not reopen model selection using the held-out test data.

@@ -67,7 +67,14 @@
 - [x] Save and fresh-process-load the cold-start router artifact.
 - [x] Audit known-user routing and simulated anonymous/unknown-user fallback without fabricating relevance labels.
 
+## Phase 10 — complete: Flask API and React UI
+
+- [x] Implement Flask app factory, validated API routes, model service, and parameterized MySQL catalog repository.
+- [x] Expose CF, content, and hybrid selections with consistent route-labeled responses and popularity fallback.
+- [x] Create a simple React/Vite UI for dataset-user sign-in, model comparison, product cards, and temporary cold-start demos.
+- [x] Add API contract tests, build the UI, and verify all routes against the real MySQL catalog and saved artifacts.
+
 ## Later phases — not started
 
-- [ ] Phase 10–12: Flask, React, testing/robustness.
+- [ ] Phase 11–12: integration testing, UI refinement, and final robustness.
 - [ ] Phase 13–14: final documentation and QA.
