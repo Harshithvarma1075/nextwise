@@ -2,10 +2,6 @@
 
 > An explainable product recommendation system that lets reviewers compare collaborative filtering, content-based recommendations, and the validation-selected hybrid—using real catalog data and transparent cold-start behavior.
 
-| Project status | Dataset | Best validated personalized model |
-| --- | --- | --- |
-| **Phase 11 complete** | Amazon Retail Demo Store synthetic e-commerce data | **Item-based collaborative filtering** |
-
 ---
 
 ## Project overview
